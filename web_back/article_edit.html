@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文章列表</title>
+    <link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- <link rel="stylesheet" href="css/iconfont.css"> -->
+    <link rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="js/jedate/css/jedate.css">
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/jedate/js/jedate.js"></script>
+    <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="js/tinymce/js/tinymce_setup.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="common_title">
+            文章编辑
+        </div>
+        <div class="container-fluid common_con">
+            <form class="form-horizontal article_form">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputEmail3" value="文章标题文字">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
+                    <div class="col-sm-10">
+                        <img src="images/pic06.jpg" class="article_cover" id="article_cove4">
+                        <input type="file" id="exampleInputFile">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
+                    <div class="col-sm-4">
+                        <select class="form-control">
+                            <option>类别一</option>
+                            <option>类别二</option>
+                            <option>类别三</option>
+                            <option selected>类别四</option>
+                            <option>类别五</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">发布时间：</label>
+                    <div class="col-sm-4">
+
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="2019-05-17" id="dateinput">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button"
+                                    onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
+                                        class="iconfont icon-icondate"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="rich_content" name="content" placeholder="文章内容" value="文章内容">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-success">修改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="./js/utils.js/template-web.js"></script>
+    <script src="./js/utils.js/config.js"></script>
+    <script src="./js/utils.js/category.js"></script>
+    <script src="./js/utils.js/article.js"></script>
+    
+
+    <script id="temp_cate" type="text/html">
+        {{each data item }}
+           <option value="{{item.id}}">{{item.name}}</option>
+           {{/each}}
+    </script>
+    <script>
+    // 从地址栏中获取当前要编辑的文章编号
+    //    (1)window.location.search====> ?id=1574556041361
+    // 通过 substr(超点下表，长度)如果不写第二个参数就会截取从起点开始到最后的全部内容
+    var str=window.location.search
+    var id =str.substr(4);
+    // (2). 根据id去搜索出当亲文章的详情，并显示在表单当前元素中
+    // (3). 保存修改
+    article.getDetail(id,function(res) {
+        console.log(res);
+        // 把res.data中的内容在表单显示
+        // 2.1 要先把所有的文章类型 选出来放在select中
+        category.show(function(result) {
+            console.log(result)
+             var htmlStr=template('temp_cate',result)
+             $('#cateContainer').html(htmlStr)
+
+              // 2.2 确保当前的文章对应的类型处于选中模式
+              $('#cateContainer').val(res.data.type)
+        })
+        $('#article_title').val(res.data.title)
+        $('#article_cover').prop('src',res.data.title)
+        $('#dateinput').val(res.data.title)
+        $('#rich_content').val(res.data.title)
+    })
+    </script>
+</body>
+
+</html>
